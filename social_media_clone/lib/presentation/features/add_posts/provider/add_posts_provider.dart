@@ -33,6 +33,6 @@ class AddPostActions {
   AddPostActions(this._dataSource);
 
   Future<void> addPost(String title, String content) async {
-    await _dataSource.uploadPost(title, content);
+    await _dataSource.createPost(title, content);
   }
 }

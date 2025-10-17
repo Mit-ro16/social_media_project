@@ -22,7 +22,7 @@ class ModeratorHomeScreen extends ConsumerStatefulWidget {
 class _ModeratorHomeScreenState extends ConsumerState<ModeratorHomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  int _currentIndex = 0;
+  int currentIndex = 0;
 
   @override
   void initState() {
@@ -110,28 +110,6 @@ class _ModeratorHomeScreenState extends ConsumerState<ModeratorHomeScreen>
                         const SizedBox(width: 8),
                       ],
                     ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          await ref
-                              .read(homeRepositoryProvider)
-                              .blacklistPost(p.postId as String);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Post blacklisted')),
-                          );
-                          ref.invalidate(approvedPostsProvider);
-                        },
-                        icon: const Icon(Icons.block),
-                        label: const Text('Blacklist'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
                 ],
               ),
             );
@@ -145,9 +123,8 @@ class _ModeratorHomeScreenState extends ConsumerState<ModeratorHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final approvedPostsAsync = ref.watch(approvedPostsProvider);
-    final pendingPostsAsync = ref.watch(pendingPostsProvider);
-   
+    final approvedPosts = ref.watch(approvedPostsProvider);
+    final pendingPosts = ref.watch(pendingPostsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -164,8 +141,8 @@ class _ModeratorHomeScreenState extends ConsumerState<ModeratorHomeScreen>
       body: TabBarView(
         controller: tabController,
         children: [
-          buildTab(pendingPostsAsync, 'PENDING'),
-          buildTab(approvedPostsAsync, 'APPROVED'),
+          buildTab(pendingPosts, 'PENDING'),
+          buildTab(approvedPosts, 'APPROVED'),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -173,9 +150,9 @@ class _ModeratorHomeScreenState extends ConsumerState<ModeratorHomeScreen>
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: (i) {
-          setState(() => _currentIndex = i);
+          setState(() => currentIndex = i);
           if (i == 0) {
             Navigator.pushReplacement(
               context,
