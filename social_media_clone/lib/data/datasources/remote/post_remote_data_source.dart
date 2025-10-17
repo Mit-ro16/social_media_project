@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:social_media_clone/core/constants/api_constants.dart';
 import 'package:social_media_clone/core/network/dio_client.dart';
 import 'package:social_media_clone/data/models/post_model.dart';
 import 'package:social_media_clone/presentation/features/home/provider/home_provider.dart';
@@ -13,9 +14,9 @@ class PostRemoteDataSource {
   final DioClient dioClient;
   PostRemoteDataSource(this.dioClient);
 
-  Future<void> uploadPost(String title, String content) async {
+  Future<void> createPost(String title, String content) async {
     try {
-      final response = await dioClient.post('/api/posts/create', {
+      final response = await dioClient.post(ApiConstants.createPost, {
         'title': title,
         'content': content,
       });
@@ -30,7 +31,7 @@ class PostRemoteDataSource {
 
   Future<List<PostModel>> getApprovedPosts() async {
     try {
-      final response = await dioClient.get('/api/posts/live');
+      final response = await dioClient.get(ApiConstants.getAllLivePosts);
       final data = response.data as List;
 
       return data.map((json) => PostModel.fromJson(json)).toList();
@@ -40,7 +41,7 @@ class PostRemoteDataSource {
   }
 
   Future<List<PostModel>> getUserPosts() async {
-    final response = await dioClient.get('/api/posts/profile');
+    final response = await dioClient.get(ApiConstants.getUserPosts);
     final data = response.data as List;
     return data.map((e) => PostModel.fromJson(e)).toList();
   }
