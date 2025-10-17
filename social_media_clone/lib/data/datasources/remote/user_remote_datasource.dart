@@ -1,3 +1,4 @@
+import 'package:social_media_clone/core/constants/api_constants.dart';
 import 'package:social_media_clone/core/network/dio_client.dart';
 import 'package:social_media_clone/data/models/user_model.dart';
 
@@ -7,7 +8,7 @@ class UserRemoteDataSource {
   UserRemoteDataSource(this.dioClient);
 
   Future<List<UserModel>> getAllUsers() async {
-    final response = await dioClient.get('/api/users');
+    final response = await dioClient.get(ApiConstants.getAllUsers);
 
     return (response.data as List)
         .map((json) => UserModel.fromJson(json))
@@ -16,7 +17,7 @@ class UserRemoteDataSource {
 
   Future<String> makeModerator(String userId) async {
     final response = await dioClient.post(
-      '/api/admin/$userId/make-moderator',
+      ApiConstants.makeModerator,
       {},
     );
     if (response.statusCode == 200) {
@@ -28,7 +29,7 @@ class UserRemoteDataSource {
 
   Future<String> removeModerator(String userId) async {
     final response = await dioClient.post(
-      '/api/admin/$userId/remove-moderator',
+      ApiConstants.removeModerator,
       {},
     );
     if (response.statusCode == 200) {
